@@ -40,7 +40,7 @@ If you want to taste some fresh or smoothie, please, select task complexity and 
 
 bot.onText(/^((?!(\/start)|(\/tips)).)*$/gm, async (msg) => {
     const chatId = msg.chat.id;
-    const isHard = users.get(chatId);
+    const isHard = users.get(chatId) | false;
     try {
         const res = await runCode(msg.text, isHard);
         bot.sendMessage(chatId, `Good job: ${res}`);
