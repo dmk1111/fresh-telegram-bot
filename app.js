@@ -84,7 +84,9 @@ const freshIngredients = new Map(Object.entries({
   banana: ['orangeBanana'],
   apple: ['apple']
 }));
-</pre>`;
+</pre>
+
+In case you need to refresh your ES6 knowledge, select /tips and I'll provide you with some links`;
 
 const normalTask = `<code>freshTitles</code> is an array with different drink names.
 <pre>
@@ -102,9 +104,7 @@ const freshIngredients = {
   banana: ['orangeBanana'],
   apple: ['apple']
 };
-</pre>
-
-In case you need to refresh your ES6 knowledge, select /tips and I'll provide you with some links`;
+</pre>`;
 
 function getTask(hard = false) {
     return `${hard ? "HARD MODE ON!!!" : "Ok, here you go:"}
