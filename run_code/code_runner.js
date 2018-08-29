@@ -1,5 +1,5 @@
 //The codeRunner.js is ran in a separate process and just listens for the message which contains code to be executed
-process.on("message", function({ jsCodeString }) {
+process.on("message", function({ jsCodeString, hardMode }) {
 	const vm = require("vm");
 	const obj = {};
 	const ctx = vm.createContext(obj);
@@ -16,16 +16,20 @@ process.on("message", function({ jsCodeString }) {
         apple: ['apple']
     };
 
-	const freshTitles = new Set(freshTitlesArray);
+	const freshTitles = hardMode ? new Set(freshTitlesArray) : freshTitlesArray;
 
-	const freshIngredients = new Map(Object.entries(freshIngredientsObj));
+	const freshIngredients = hardMode ? new Map(Object.entries(freshIngredientsObj)) : freshIngredientsObj;
 
 	try {
-		const script = new vm.Script(`
+		const script = hardMode ? new vm.Script(`
 		const freshTitles = new Set(${JSON.stringify(freshTitlesArray)});
 		const freshIngredients = new Map(Object.entries(${JSON.stringify(freshIngredientsObj)}));
 		var getIngredientsByTitleIndex = ${jsCodeString};
-		`);
+		`) : new vm.Script(`
+		const freshTitles = ${JSON.stringify(freshTitlesArray)};
+		const freshIngredients = ${JSON.stringify(freshIngredientsObj)};
+		var getIngredientsByTitleIndex = ${jsCodeString};
+		`) ;
 		script.runInNewContext(ctx);
 		let result = `
 getIngredientsByTitleIndex(0) output: ${JSON.stringify(ctx['getIngredientsByTitleIndex'](0))}, expected output: ["orange"];

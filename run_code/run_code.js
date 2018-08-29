@@ -7,15 +7,16 @@ cluster.setupMaster({
 
 /**
  * Executes function from students code with given args and returns Promise with result of execution
- * @param   {string}  studentCode
+ * @param   {string}  jsCodeString
+ * @param   {boolean} hardMode
  * @returns {Promise<any>}
  */
 
-async function runCode(jsCodeString) {
+async function runCode(jsCodeString, hardMode = false) {
 	return new Promise((resolve, reject) => {
 		let timer = 0;
 		const worker = cluster.fork();
-		worker.send({ jsCodeString});
+		worker.send({ jsCodeString, hardMode});
 		worker.on("message", function(result) {
 			clearTimeout(timer); //The worker responded in under 5 seconds, clear the timeout
 			if (result.error) {
