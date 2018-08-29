@@ -1,16 +1,18 @@
 {
-  "name": "lviv_js",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "postinstall": "npm run start",
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "node-telegram-bot-api": "^0.30.0"
-  }
+	"name": "lviv_js",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"postinstall": "npm run start",
+		"start": "node app.js",
+		"format": "prettier --print-width=120 --use-tabs --write \"**/*.js\"  \"**/*.json\"",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"node-telegram-bot-api": "^0.30.0",
+		"prettier": "^1.14.2"
+	}
 }
