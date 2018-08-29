@@ -16,7 +16,7 @@ async function runCode(jsCodeString, hardMode = false) {
 	return new Promise((resolve, reject) => {
 		let timer = 0;
 		const worker = cluster.fork();
-		worker.send({ jsCodeString, hardMode});
+		worker.send({ jsCodeString, hardMode });
 		worker.on("message", function(result) {
 			clearTimeout(timer); //The worker responded in under 5 seconds, clear the timeout
 			if (result.error) {

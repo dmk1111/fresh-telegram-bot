@@ -1,48 +1,43 @@
+const drinksArray = require("../constants/drinks");
+const ingredientsObj = require("../constants/ingredients");
 //The codeRunner.js is ran in a separate process and just listens for the message which contains code to be executed
+
 process.on("message", function({ jsCodeString, hardMode }) {
 	const vm = require("vm");
 	const obj = {};
 	const ctx = vm.createContext(obj);
 
-    const freshTitlesArray = [
-        'orange',
-        'orangeBanana',
-        'apple'
-    ];
-
-    const freshIngredientsObj = {
-        orange: ['orange', 'orangeBanana'],
-        banana: ['orangeBanana'],
-        apple: ['apple']
-    };
-
-	const freshTitles = hardMode ? new Set(freshTitlesArray) : freshTitlesArray;
-
-	const freshIngredients = hardMode ? new Map(Object.entries(freshIngredientsObj)) : freshIngredientsObj;
-
 	try {
-		const script = hardMode ? new vm.Script(`
-		const freshTitles = new Set(${JSON.stringify(freshTitlesArray)});
-		const freshIngredients = new Map(Object.entries(${JSON.stringify(freshIngredientsObj)}));
-		var getIngredientsByTitleIndex = ${jsCodeString};
-		`) : new vm.Script(`
-		const freshTitles = ${JSON.stringify(freshTitlesArray)};
-		const freshIngredients = ${JSON.stringify(freshIngredientsObj)};
-		var getIngredientsByTitleIndex = ${jsCodeString};
-		`) ;
+		const script = hardMode
+			? new vm.Script(`
+		const drinks = new Set(${JSON.stringify(drinksArray)});
+		const ingredients = new Map(Object.entries(${JSON.stringify(ingredientsObj)}));
+		var getIngredientsByDrinkIndex = ${jsCodeString};
+		`)
+			: new vm.Script(`
+		const drinks = ${JSON.stringify(drinksArray)};
+		const ingredients = ${JSON.stringify(ingredientsObj)};
+		var getIngredientsByDrinkIndex = ${jsCodeString};
+		`);
 		script.runInNewContext(ctx);
 		let result = `
-getIngredientsByTitleIndex(0) output: ${JSON.stringify(ctx['getIngredientsByTitleIndex'](0))}, expected output: ["orange"];
-getIngredientsByTitleIndex(1) output: ${JSON.stringify(ctx['getIngredientsByTitleIndex'](1))}, expected output: ["orange", "banana"];
-getIngredientsByTitleIndex(2) output: ${JSON.stringify(ctx['getIngredientsByTitleIndex'](2))}, expected output: ["apple"];\n`;
+getIngredientsByDrinkIndex(0) output: ${JSON.stringify(
+			ctx["getIngredientsByDrinkIndex"](0)
+		)}, expected output: ["orange"];
+getIngredientsByDrinkIndex(1) output: ${JSON.stringify(
+			ctx["getIngredientsByDrinkIndex"](1)
+		)}, expected output: ["orange", "banana"];
+getIngredientsByDrinkIndex(2) output: ${JSON.stringify(
+			ctx["getIngredientsByDrinkIndex"](2)
+		)}, expected output: ["apple"];\n`;
 		if (
-			JSON.stringify(ctx['getIngredientsByTitleIndex'](0)) === JSON.stringify(["orange"]) &&
-			JSON.stringify(ctx['getIngredientsByTitleIndex'](1).sort()) === JSON.stringify(["orange", "banana"].sort()) &&
-			JSON.stringify(ctx['getIngredientsByTitleIndex'](2)) === JSON.stringify(["apple"])
+			JSON.stringify(ctx["getIngredientsByDrinkIndex"](0)) === JSON.stringify(["orange"]) &&
+			JSON.stringify(ctx["getIngredientsByDrinkIndex"](1).sort()) === JSON.stringify(["orange", "banana"].sort()) &&
+			JSON.stringify(ctx["getIngredientsByDrinkIndex"](2)) === JSON.stringify(["apple"])
 		) {
-			process.send( result += 'Please choose your fresh!');
+			process.send((result += "Please choose your fresh!"));
 		} else {
-			process.send({ error: result += 'Invalid function, please try again.' });
+			process.send({ error: (result += "Invalid function, please try again.") });
 		}
 	} catch (error) {
 		process.send({ error: error.message });
