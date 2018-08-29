@@ -3,22 +3,27 @@ process.on("message", function({ jsCodeString }) {
 	const vm = require("vm");
 	const obj = {};
 	const ctx = vm.createContext(obj);
-	const freshTitles = [
-		'orange',
-		'orangeBanana',
-		'apple'
-	];
 
-	const freshIngredients = {
-		orange: ['orange', 'orangeBanana'],
-		banana: ['orangeBanana'],
-		apple: ['apple']
-	};
+    const freshTitlesArray = [
+        'orange',
+        'orangeBanana',
+        'apple'
+    ];
+
+    const freshIngredientsObj = {
+        orange: ['orange', 'orangeBanana'],
+        banana: ['orangeBanana'],
+        apple: ['apple']
+    };
+
+	const freshTitles = new Set(freshTitlesArray);
+
+	const freshIngredients = new Map(Object.entries(freshIngredientsObj));
 
 	try {
 		const script = new vm.Script(`
-		const freshTitles = ${JSON.stringify(freshTitles)};
-		const freshIngredients = ${JSON.stringify(freshIngredients)};
+		const freshTitles = new Set(${JSON.stringify(freshTitlesArray)});
+		const freshIngredients = new Map(Object.entries(${JSON.stringify(freshIngredientsObj)}));
 		var getIngredientsByTitleIndex = ${jsCodeString};
 		`);
 		script.runInNewContext(ctx);
