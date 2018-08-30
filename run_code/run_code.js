@@ -27,9 +27,9 @@ async function runCode(jsCodeString, hardMode = false) {
 			worker.destroy(); //Don't leave him hanging
 		});
 		timer = setTimeout(function() {
-			worker.destroy(); //Give it 5 seconds to run, then abort it
+			worker.destroy(); //Give it 1 second to run, then abort it
 			reject("timed out");
-		}, 5000);
+		}, 1000);
 	});
 }
 

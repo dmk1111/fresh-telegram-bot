@@ -1,1 +1,7 @@
-module.exports = ["orange", "orangeBanana", "apple"];
+module.exports = [
+	"bananaPearSmoozie",
+	"orangeBananaSmoozie",
+	"vitaminFruitSmoozie",
+	"peachApricotSmoozie",
+	"greenOrangeSmoozie"
+];

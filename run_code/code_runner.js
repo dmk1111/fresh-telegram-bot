@@ -23,17 +23,20 @@ process.on("message", function({ jsCodeString, hardMode }) {
 		let result = `
 getIngredientsByDrinkIndex(0) output: ${JSON.stringify(
 			ctx["getIngredientsByDrinkIndex"](0)
-		)}, expected output: ["orange"];
-getIngredientsByDrinkIndex(1) output: ${JSON.stringify(
-			ctx["getIngredientsByDrinkIndex"](1)
-		)}, expected output: ["orange", "banana"];
+		)}, expected output: ["pear", "banana", "celery"];
 getIngredientsByDrinkIndex(2) output: ${JSON.stringify(
 			ctx["getIngredientsByDrinkIndex"](2)
-		)}, expected output: ["apple"];\n`;
+		)}, expected output: ["pear", "banana", "apple", "orange"];
+getIngredientsByDrinkIndex(4) output: ${JSON.stringify(
+			ctx["getIngredientsByDrinkIndex"](4)
+		)}, expected output: ["carrot", "apple", "orange", "broccoli", "spinach"];\n`;
 		if (
-			JSON.stringify(ctx["getIngredientsByDrinkIndex"](0)) === JSON.stringify(["orange"]) &&
-			JSON.stringify(ctx["getIngredientsByDrinkIndex"](1).sort()) === JSON.stringify(["orange", "banana"].sort()) &&
-			JSON.stringify(ctx["getIngredientsByDrinkIndex"](2)) === JSON.stringify(["apple"])
+			JSON.stringify(ctx["getIngredientsByDrinkIndex"](0).sort()) ===
+				JSON.stringify(["pear", "banana", "celery"].sort()) &&
+			JSON.stringify(ctx["getIngredientsByDrinkIndex"](2).sort()) ===
+				JSON.stringify(["pear", "banana", "apple", "orange"].sort()) &&
+			JSON.stringify(ctx["getIngredientsByDrinkIndex"](4)) ===
+				JSON.stringify(["carrot", "apple", "orange", "broccoli", "spinach"])
 		) {
 			process.send((result += "Please choose your fresh!"));
 		} else {
