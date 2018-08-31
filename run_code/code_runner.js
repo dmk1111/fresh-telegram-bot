@@ -38,7 +38,10 @@ getIngredientsByDrinkIndex(4) output: ${JSON.stringify(
 			JSON.stringify(ctx["getIngredientsByDrinkIndex"](4)) ===
 				JSON.stringify(["carrot", "apple", "orange", "broccoli", "spinach"])
 		) {
-			process.send((result += "Please choose your fresh!"));
+			process.send({
+				message: (result += "Please choose your fresh!"),
+				codeLength: jsCodeString.length
+			});
 		} else {
 			process.send({ error: (result += "Invalid function, please try again.") });
 		}
