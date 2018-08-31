@@ -4,6 +4,7 @@ const token = require("./credentials/token");
 const { runCode } = require("./run_code/run_code.js");
 const drinks = require("./constants/drinks");
 const ingredients = require("./constants/ingredients");
+const { saveSuccessResult, saveFailedResult } = require("./save_result/save_result");
 
 const users = new Map();
 
@@ -48,10 +49,12 @@ bot.onText(/^((?!(\/start)|(\/tips)).)*$/gm, async msg => {
 	const chatId = msg.chat.id;
 	const isHard = users.get(chatId) | false;
 	try {
-		const res = await runCode(msg.text, isHard);
-		bot.sendMessage(chatId, `Good job: ${res}`);
+		const result = await runCode(msg.text, isHard);
+		bot.sendMessage(chatId, `Good job: ${result.message}.\nYou did it with ${result.codeLength} symbols!`);
+		saveSuccessResult([msg.from.id, msg.from.first_name, result.codeLength, msg.text]);
 	} catch (e) {
 		bot.sendMessage(chatId, `Error: ${e}`);
+		saveFailedResult([msg.from.id, msg.from.first_name, msg.text]);
 	}
 });
 
